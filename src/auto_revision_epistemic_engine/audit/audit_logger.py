@@ -4,6 +4,8 @@ Audit Logger with BLAKE3 hashing for immutable append-only logs
 
 import blake3
 import json
+import os
+import threading
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -60,17 +62,30 @@ class AuditLogger:
         self.log_file = self.log_dir / "audit_log.jsonl"
         self.attestation_file = self.log_dir / "attestations.jsonl"
         self._last_hash: Optional[str] = None
+        self._lock = threading.Lock()  # Thread safety for concurrent access
         self._initialize_log()
 
     def _initialize_log(self):
-        """Initialize or load existing log"""
+        """Initialize or load existing log with corruption recovery"""
         if self.log_file.exists():
-            # Load last hash from existing log
-            with open(self.log_file, "r") as f:
-                lines = f.readlines()
-                if lines:
-                    last_entry = json.loads(lines[-1])
-                    self._last_hash = last_entry.get("entry_hash")
+            # Load last hash from existing log with error recovery
+            try:
+                with open(self.log_file, "r") as f:
+                    lines = f.readlines()
+                    if lines:
+                        # Try from end backward to handle corrupted last line
+                        for line in reversed(lines[-10:]):  # Check last 10 entries
+                            try:
+                                last_entry = json.loads(line.strip())
+                                # Verify entry has required fields
+                                if "entry_hash" in last_entry:
+                                    self._last_hash = last_entry.get("entry_hash")
+                                    break
+                            except json.JSONDecodeError:
+                                continue  # Skip corrupted line
+            except IOError as e:
+                # Log file exists but cannot be read - critical error
+                raise RuntimeError(f"Cannot initialize audit log: {e}")
         else:
             # Create new log file
             self.log_file.touch()
@@ -84,7 +99,7 @@ class AuditLogger:
         metadata: Optional[Dict[str, Any]] = None,
     ) -> AuditEntry:
         """
-        Log an event to the append-only audit log.
+        Log an event to the append-only audit log with thread safety.
 
         Args:
             event_type: Type of event (e.g., 'PHASE_START', 'HRG_REVIEW', 'RESOURCE_ALLOCATION')
@@ -96,22 +111,29 @@ class AuditLogger:
         Returns:
             AuditEntry: The created audit entry
         """
-        entry = AuditEntry(
-            event_type=event_type,
-            phase=phase,
-            actor=actor,
-            action=action,
-            metadata=metadata or {},
-            previous_hash=self._last_hash,
-        )
-        entry.entry_hash = entry.compute_hash()
-        self._last_hash = entry.entry_hash
+        with self._lock:  # Thread-safe logging
+            entry = AuditEntry(
+                event_type=event_type,
+                phase=phase,
+                actor=actor,
+                action=action,
+                metadata=metadata or {},
+                previous_hash=self._last_hash,
+            )
+            entry.entry_hash = entry.compute_hash()
+            self._last_hash = entry.entry_hash
 
-        # Append to log file (immutable)
-        with open(self.log_file, "a") as f:
-            f.write(entry.model_dump_json() + "\n")
+            # Append to log file with error handling
+            try:
+                with open(self.log_file, "a") as f:
+                    f.write(entry.model_dump_json() + "\n")
+                    f.flush()  # Force write to OS buffer
+                    os.fsync(f.fileno())  # Force write to disk
+            except IOError as e:
+                # Critical: audit log write failed
+                raise RuntimeError(f"Failed to write audit log: {e}")
 
-        return entry
+            return entry
 
     def create_attestation(
         self,

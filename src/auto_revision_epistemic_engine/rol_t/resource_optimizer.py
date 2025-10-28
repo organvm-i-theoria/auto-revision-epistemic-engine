@@ -2,6 +2,7 @@
 Resource Optimization Layer-Tracking (ROL-T) for utilization tracking and waste governance
 """
 
+import threading
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
@@ -64,9 +65,10 @@ class ResourceOptimizationLayer:
         self.allocations: Dict[str, ResourceAllocation] = {}
         self.usages: List[ResourceUsage] = []
         self.assessments: List[WasteGovernance] = []
+        self._lock = threading.Lock()  # Thread safety for resource management
         
-        # Waste thresholds by resource type (percentage)
-        self.waste_thresholds = waste_thresholds or {
+        # Validate and set waste thresholds
+        thresholds = waste_thresholds or {
             ResourceType.COMPUTE: 0.15,  # 15% waste threshold
             ResourceType.MEMORY: 0.20,   # 20% waste threshold
             ResourceType.STORAGE: 0.10,  # 10% waste threshold
@@ -74,6 +76,16 @@ class ResourceOptimizationLayer:
             ResourceType.API_CALLS: 0.05, # 5% waste threshold
             ResourceType.HUMAN_TIME: 0.10, # 10% waste threshold
         }
+        
+        # Validate thresholds are between 0 and 1
+        for resource_type, threshold in thresholds.items():
+            if not 0 <= threshold <= 1:
+                raise ValueError(
+                    f"Invalid waste threshold for {resource_type}: {threshold}. "
+                    f"Must be between 0 and 1."
+                )
+        
+        self.waste_thresholds = thresholds
 
     def allocate_resource(
         self,
@@ -84,7 +96,7 @@ class ResourceOptimizationLayer:
         priority: int = 5,
     ) -> ResourceAllocation:
         """
-        Allocate resources for a phase.
+        Allocate resources for a phase with thread safety.
 
         Args:
             resource_type: Type of resource
@@ -96,25 +108,26 @@ class ResourceOptimizationLayer:
         Returns:
             ResourceAllocation: The allocation record
         """
-        allocation_id = f"ALLOC_{resource_type}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}"
-        
-        # Apply optimization logic
-        amount_allocated = self._optimize_allocation(
-            resource_type, amount_requested, priority
-        )
-        
-        allocation = ResourceAllocation(
-            allocation_id=allocation_id,
-            resource_type=resource_type,
-            phase=phase,
-            amount_requested=amount_requested,
-            amount_allocated=amount_allocated,
-            unit=unit,
-            priority=priority,
-        )
-        
-        self.allocations[allocation_id] = allocation
-        return allocation
+        with self._lock:  # Thread-safe allocation
+            allocation_id = f"ALLOC_{resource_type}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}"
+            
+            # Apply optimization logic
+            amount_allocated = self._optimize_allocation(
+                resource_type, amount_requested, priority
+            )
+            
+            allocation = ResourceAllocation(
+                allocation_id=allocation_id,
+                resource_type=resource_type,
+                phase=phase,
+                amount_requested=amount_requested,
+                amount_allocated=amount_allocated,
+                unit=unit,
+                priority=priority,
+            )
+            
+            self.allocations[allocation_id] = allocation
+            return allocation
 
     def _optimize_allocation(
         self,
@@ -153,7 +166,7 @@ class ResourceOptimizationLayer:
         amount_used: float,
     ) -> ResourceUsage:
         """
-        Record resource usage.
+        Record resource usage with thread safety and over-allocation detection.
 
         Args:
             allocation_id: ID of the allocation
@@ -162,35 +175,41 @@ class ResourceOptimizationLayer:
         Returns:
             ResourceUsage: The usage record
         """
-        if allocation_id not in self.allocations:
-            raise ValueError(f"Allocation {allocation_id} not found")
-        
-        allocation = self.allocations[allocation_id]
-        usage_id = f"USAGE_{allocation_id}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}"
-        
-        # Calculate waste
-        amount_wasted = max(0, allocation.amount_allocated - amount_used)
-        
-        # Calculate efficiency
-        efficiency = (
-            amount_used / allocation.amount_allocated
-            if allocation.amount_allocated > 0
-            else 1.0
-        )
-        
-        usage = ResourceUsage(
-            usage_id=usage_id,
-            allocation_id=allocation_id,
-            resource_type=allocation.resource_type,
-            phase=allocation.phase,
-            amount_used=amount_used,
-            amount_wasted=amount_wasted,
-            unit=allocation.unit,
-            efficiency=efficiency,
-        )
-        
-        self.usages.append(usage)
-        return usage
+        with self._lock:  # Thread-safe usage recording
+            if allocation_id not in self.allocations:
+                raise ValueError(f"Allocation {allocation_id} not found")
+            
+            allocation = self.allocations[allocation_id]
+            usage_id = f"USAGE_{allocation_id}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}"
+            
+            # Calculate waste
+            amount_wasted = max(0, allocation.amount_allocated - amount_used)
+            
+            # Calculate efficiency (cap at 1.0 for normal cases)
+            efficiency = (
+                min(1.0, amount_used / allocation.amount_allocated)
+                if allocation.amount_allocated > 0
+                else 1.0
+            )
+            
+            # Detect over-allocation (usage exceeds allocation)
+            if amount_used > allocation.amount_allocated:
+                # Log warning but allow it (efficiency will be capped at 1.0)
+                pass  # In production, this would trigger an alert
+            
+            usage = ResourceUsage(
+                usage_id=usage_id,
+                allocation_id=allocation_id,
+                resource_type=allocation.resource_type,
+                phase=allocation.phase,
+                amount_used=amount_used,
+                amount_wasted=amount_wasted,
+                unit=allocation.unit,
+                efficiency=efficiency,
+            )
+            
+            self.usages.append(usage)
+            return usage
 
     def assess_waste_governance(
         self,

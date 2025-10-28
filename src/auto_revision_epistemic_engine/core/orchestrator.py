@@ -164,7 +164,19 @@ class Orchestrator:
         
         # Ethics audit before phase execution
         if self.ethics:
-            self._conduct_ethics_audit(phase, inputs, "PRE_PHASE")
+            pre_audit = self._conduct_ethics_audit(phase, inputs, "PRE_PHASE")
+            # Enforce BLOCK-level violations
+            if pre_audit and pre_audit.violations:
+                error_msg = f"Ethics violation (PRE): {pre_audit.violations[0]['axiom_id']}"
+                self.phase_manager.fail_phase(execution.execution_id, error_msg)
+                self.audit_logger.log_event(
+                    event_type="ETHICS_VIOLATION",
+                    actor="SYSTEM",
+                    action=error_msg,
+                    phase=phase.value,
+                    metadata={"violations": pre_audit.violations},
+                )
+                return {"success": False, "error": error_msg}
         
         # Check for HRG gate
         hrg_gate = self.phase_manager.get_phase_hrg_gate(phase)
@@ -235,7 +247,19 @@ class Orchestrator:
             
             # Ethics audit after phase execution
             if self.ethics:
-                self._conduct_ethics_audit(phase, outputs, "POST_PHASE")
+                post_audit = self._conduct_ethics_audit(phase, outputs, "POST_PHASE")
+                # Enforce BLOCK-level violations
+                if post_audit and post_audit.violations:
+                    error_msg = f"Ethics violation (POST): {post_audit.violations[0]['axiom_id']}"
+                    self.phase_manager.fail_phase(execution.execution_id, error_msg)
+                    self.audit_logger.log_event(
+                        event_type="ETHICS_VIOLATION",
+                        actor="SYSTEM",
+                        action=error_msg,
+                        phase=phase.value,
+                        metadata={"violations": post_audit.violations},
+                    )
+                    return {"success": False, "error": error_msg}
             
             # Log phase completion
             self.audit_logger.log_event(
@@ -365,10 +389,10 @@ class Orchestrator:
         phase: PhaseName,
         context: Dict[str, Any],
         stage: str,
-    ):
-        """Conduct ethics audit for a phase"""
+    ) -> Optional[Any]:
+        """Conduct ethics audit for a phase and return audit result"""
         if not self.ethics:
-            return
+            return None
         
         audit = self.ethics.conduct_normative_audit(
             phase=f"{phase.value}_{stage}",
@@ -393,6 +417,8 @@ class Orchestrator:
                 "warnings": len(audit.warnings),
             },
         )
+        
+        return audit  # Return audit result for enforcement
 
     def _simulate_hrg_approval(self, review_id: str):
         """Simulate HRG approval (in real system, this would be actual human review)"""
