@@ -1,0 +1,30 @@
+{
+  "state_id": "ANALYSIS_20251028_075512_970762",
+  "timestamp": "2025-10-28T07:55:12.970949",
+  "phase": "ANALYSIS",
+  "data": {
+    "inputs": {
+      "phase": "PROCESSING",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.970404",
+      "data": {
+        "records": 100
+      },
+      "processed_records": 0
+    },
+    "outputs": {
+      "phase": "ANALYSIS",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.970939",
+      "data": {
+        "records": 100
+      },
+      "analysis_results": {
+        "status": "analyzed"
+      }
+    },
+    "timestamp": "2025-10-28T07:55:12.970945"
+  },
+  "config_hash": "1ddc32260d945cac3309832ac4859e827e2f1a9ecafbfcd2cda9521cd178a76c",
+  "state_hash": "3c00aff7237100c8e1930aab79e25640df682641597d182843872649129d3f73"
+}

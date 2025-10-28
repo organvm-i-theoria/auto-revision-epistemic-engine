@@ -1,0 +1,30 @@
+{
+  "state_id": "VALIDATION_20251028_075512_971274",
+  "timestamp": "2025-10-28T07:55:12.971546",
+  "phase": "VALIDATION",
+  "data": {
+    "inputs": {
+      "phase": "ANALYSIS",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.970939",
+      "data": {
+        "records": 100
+      },
+      "analysis_results": {
+        "status": "analyzed"
+      }
+    },
+    "outputs": {
+      "phase": "VALIDATION",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.971537",
+      "data": {
+        "records": 100
+      },
+      "validation_passed": true
+    },
+    "timestamp": "2025-10-28T07:55:12.971542"
+  },
+  "config_hash": "1ddc32260d945cac3309832ac4859e827e2f1a9ecafbfcd2cda9521cd178a76c",
+  "state_hash": "e8e67f985f136eb727b4861546bb50cb1cdbe9e4c818a9d17997a98628f7fb65"
+}

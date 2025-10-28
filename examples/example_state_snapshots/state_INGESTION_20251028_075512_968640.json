@@ -1,0 +1,27 @@
+{
+  "state_id": "INGESTION_20251028_075512_968640",
+  "timestamp": "2025-10-28T07:55:12.969149",
+  "phase": "INGESTION",
+  "data": {
+    "inputs": {
+      "data": {
+        "records": 100
+      },
+      "config": {
+        "mode": "standard"
+      }
+    },
+    "outputs": {
+      "phase": "INGESTION",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.969137",
+      "data": {
+        "records": 100
+      },
+      "ingested_records": 0
+    },
+    "timestamp": "2025-10-28T07:55:12.969143"
+  },
+  "config_hash": "1ddc32260d945cac3309832ac4859e827e2f1a9ecafbfcd2cda9521cd178a76c",
+  "state_hash": "9e399af37808e78b452cbfcac1bfa4aebdb226c95b0d25892b92414882cb38b2"
+}

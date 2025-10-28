@@ -1,0 +1,28 @@
+{
+  "state_id": "PREPROCESSING_20251028_075512_969539",
+  "timestamp": "2025-10-28T07:55:12.969782",
+  "phase": "PREPROCESSING",
+  "data": {
+    "inputs": {
+      "phase": "INGESTION",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.969137",
+      "data": {
+        "records": 100
+      },
+      "ingested_records": 0
+    },
+    "outputs": {
+      "phase": "PREPROCESSING",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.969770",
+      "data": {
+        "records": 100
+      },
+      "preprocessed_records": 0
+    },
+    "timestamp": "2025-10-28T07:55:12.969778"
+  },
+  "config_hash": "1ddc32260d945cac3309832ac4859e827e2f1a9ecafbfcd2cda9521cd178a76c",
+  "state_hash": "12c8174a596d6983ee9c58756cc43f9e06a70c8b85e1c4d478ebd73fc6fd7eaf"
+}

@@ -1,0 +1,30 @@
+{
+  "state_id": "REVIEW_20251028_075512_972417",
+  "timestamp": "2025-10-28T07:55:12.972631",
+  "phase": "REVIEW",
+  "data": {
+    "inputs": {
+      "phase": "SYNTHESIS",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.972092",
+      "data": {
+        "records": 100
+      },
+      "synthesized_output": {
+        "status": "synthesized"
+      }
+    },
+    "outputs": {
+      "phase": "REVIEW",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.972621",
+      "data": {
+        "records": 100
+      },
+      "review_status": "reviewed"
+    },
+    "timestamp": "2025-10-28T07:55:12.972627"
+  },
+  "config_hash": "1ddc32260d945cac3309832ac4859e827e2f1a9ecafbfcd2cda9521cd178a76c",
+  "state_hash": "3502b0c233a4893ef2bfc6a897140607677d3104578379c88ff389251e59e1db"
+}

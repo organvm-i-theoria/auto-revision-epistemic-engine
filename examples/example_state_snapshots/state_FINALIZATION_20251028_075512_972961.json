@@ -1,0 +1,30 @@
+{
+  "state_id": "FINALIZATION_20251028_075512_972961",
+  "timestamp": "2025-10-28T07:55:12.973219",
+  "phase": "FINALIZATION",
+  "data": {
+    "inputs": {
+      "phase": "REVIEW",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.972621",
+      "data": {
+        "records": 100
+      },
+      "review_status": "reviewed"
+    },
+    "outputs": {
+      "phase": "FINALIZATION",
+      "processed": true,
+      "timestamp": "2025-10-28T07:55:12.973210",
+      "data": {
+        "records": 100
+      },
+      "final_output": {
+        "status": "finalized"
+      }
+    },
+    "timestamp": "2025-10-28T07:55:12.973215"
+  },
+  "config_hash": "1ddc32260d945cac3309832ac4859e827e2f1a9ecafbfcd2cda9521cd178a76c",
+  "state_hash": "bdf9daf6c62ba1d11d29bdd4dd1a98c650329d672979394ca3d38ad70b1e286a"
+}
