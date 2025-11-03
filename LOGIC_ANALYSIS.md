@@ -236,7 +236,7 @@ def pin_model(self, model_name: str, version: str, checksum: Optional[str] = Non
     self.config.model_pins[model_name] = {
         "version": version,
         "checksum": checksum,
-        "pinned_at": datetime.utcnow().isoformat()
+        "pinned_at": datetime.now(timezone.utc).isoformat()
     }
 ```
 
