@@ -1,0 +1,30 @@
+agents:
+  gemini_arbiter:
+    model: "gemini-1.5-pro-05-13"
+    role: "conflict resolution & arbitration"
+    max_concurrency: 1
+    scope:
+      fs: ["./", "./audit_logs", "./state_snapshots"]
+      net: ["github.com"]
+    budget_usd: 50
+
+  security_agent:
+    model: "gpt-4o-2024-05-13"
+    role: "security audit"
+    scope:
+      fs: ["./", "./artifacts"]
+      net: []
+    budget_usd: 30
+
+  doc_agent:
+    model: "gemini-1.5-pro-05-13"
+    role: "documentation"
+    scope:
+      fs: ["./docs", "./README.md"]
+      net: []
+    budget_usd: 20
+
+fallback_strategy:
+  - "gpt-4o-2024-05-13"
+  - "gemini-1.5-pro-05-13"
+pinned: true
