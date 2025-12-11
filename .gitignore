@@ -45,3 +45,4 @@ state_snapshots/
 # Exclude zip archives
 *.zip
 files.zip
+*.zip
