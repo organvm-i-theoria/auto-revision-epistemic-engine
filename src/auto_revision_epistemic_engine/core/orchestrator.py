@@ -4,7 +4,7 @@ Core Orchestrator that coordinates all components
 
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from ..phases.phase_manager import PhaseManager, PhaseName, PhaseStatus
 from ..hrg.human_review_gate import HumanReviewGate, ReviewStatus
