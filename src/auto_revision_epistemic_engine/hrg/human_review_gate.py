@@ -194,10 +194,12 @@ class HumanReviewGate:
         
         review = self.reviews[review_id]
         
-        # Update review
+        # Ensure reviewer is set
         if reviewer:
             review.reviewer = reviewer
-        
+        elif not getattr(review, "reviewer", None):
+            # No reviewer set, cannot complete review
+            return False
         review.decision = decision.upper()
         review.rationale = rationale
         review.resolved_at = datetime.now(timezone.utc).isoformat()
