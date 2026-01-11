@@ -341,14 +341,11 @@ class HumanReviewGate:
             EscalationLevel.CRITICAL,
         ]
         
-        try:
+        if current_level in levels:
             current_idx = levels.index(current_level)
             if current_idx < len(levels) - 1:
                 return levels[current_idx + 1]
-        except ValueError:
-            # If current_level is not found, escalate to CRITICAL as a safe fallback.
-            pass
-        
+        # If current_level is not found, escalate to CRITICAL as a safe fallback.
         return EscalationLevel.CRITICAL
 
     def get_pending_reviews(
