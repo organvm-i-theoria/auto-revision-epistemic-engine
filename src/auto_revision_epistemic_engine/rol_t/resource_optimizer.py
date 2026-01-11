@@ -69,12 +69,12 @@ class ResourceOptimizationLayer:
         
         # Validate and set waste thresholds
         thresholds = waste_thresholds or {
-            ResourceType.COMPUTE: 0.15,  # 15% waste threshold
-            ResourceType.MEMORY: 0.20,   # 20% waste threshold
-            ResourceType.STORAGE: 0.10,  # 10% waste threshold
-            ResourceType.NETWORK: 0.25,  # 25% waste threshold
-            ResourceType.API_CALLS: 0.05, # 5% waste threshold
-            ResourceType.HUMAN_TIME: 0.10, # 10% waste threshold
+            ResourceType.COMPUTE.value: 0.15,  # 15% waste threshold
+            ResourceType.MEMORY.value: 0.20,   # 20% waste threshold
+            ResourceType.STORAGE.value: 0.10,  # 10% waste threshold
+            ResourceType.NETWORK.value: 0.25,  # 25% waste threshold
+            ResourceType.API_CALLS.value: 0.05, # 5% waste threshold
+            ResourceType.HUMAN_TIME.value: 0.10, # 10% waste threshold
         }
         
         # Validate thresholds are between 0 and 1

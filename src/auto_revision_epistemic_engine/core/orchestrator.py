@@ -2,6 +2,7 @@
 Core Orchestrator that coordinates all components
 """
 
+import random
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 from pydantic import BaseModel
@@ -375,7 +376,6 @@ class Orchestrator:
         for allocation_id, allocation in self.rol_t.allocations.items():
             if allocation.phase == phase.value:
                 # Simulate usage (80-95% of allocated)
-                import random
                 usage_factor = 0.80 + random.random() * 0.15
                 amount_used = allocation.amount_allocated * usage_factor
                 

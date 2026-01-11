@@ -76,13 +76,18 @@ class AuditLogger:
                         # Try from end backward to handle corrupted last line
                         for line in reversed(lines[-10:]):  # Check last 10 entries
                             try:
-                                last_entry = json.loads(line.strip())
+                                last_entry_data = json.loads(line.strip())
                                 # Verify entry has required fields
-                                if "entry_hash" in last_entry:
-                                    self._last_hash = last_entry.get("entry_hash")
-                                    break
-                            except json.JSONDecodeError:
-                                continue  # Skip corrupted line
+                                if "entry_hash" in last_entry_data:
+                                    # Verify hash integrity
+                                    entry = AuditEntry(**last_entry_data)
+                                    expected_hash = entry.compute_hash()
+                                    if entry.entry_hash == expected_hash:
+                                        self._last_hash = entry.entry_hash
+                                        break
+                                    # Hash mismatch, continue to previous entry
+                            except (json.JSONDecodeError, Exception):
+                                continue  # Skip corrupted or invalid line
             except IOError as e:
                 # Log file exists but cannot be read - critical error
                 raise RuntimeError(f"Cannot initialize audit log: {e}")
