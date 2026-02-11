@@ -9,6 +9,14 @@
 
 # Auto-Revision Epistemic Engine v4.2
 
+[![CI](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-pending-lightgrey)](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine/blob/main/LICENSE)
+[![Organ I](https://img.shields.io/badge/Organ-I%20Theoria-8B5CF6)](https://github.com/organvm-i-theoria)
+[![Status](https://img.shields.io/badge/status-active-brightgreen)](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine)
+[![Python](https://img.shields.io/badge/lang-Python-informational)](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine)
+
+
 **A self-governing orchestration framework that formalizes how autonomous AI/ML pipelines should audit, constrain, and justify their own execution.**
 
 The Auto-Revision Epistemic Engine (ARE) is not another pipeline runner. It is a working formalization of a question that sits at the intersection of epistemology and systems engineering: *How should a computational process govern itself when its outputs carry real-world consequences?*
