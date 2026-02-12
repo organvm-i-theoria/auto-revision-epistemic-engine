@@ -1,0 +1,49 @@
+{
+  "pipeline_id": "demo-eight-phase",
+  "random_seed": 42,
+  "inputs": {
+    "data": {
+      "records": 100,
+      "format": "structured",
+      "schema_version": "2.1"
+    },
+    "source": "demo",
+    "metadata": {
+      "created_by": "sample_pipeline",
+      "purpose": "Demonstrate full 8-phase orchestration with HRG, ethics, ROL-T, and audit"
+    }
+  },
+  "hrg_config": {
+    "auto_approve": true,
+    "default_sla": {
+      "response_time_hours": 4.0,
+      "resolution_time_hours": 24.0,
+      "escalation_time_hours": 8.0
+    }
+  },
+  "ethics_config": {
+    "enabled": true,
+    "custom_axioms": [
+      {
+        "axiom_id": "DEMO_TRANS_001",
+        "category": "TRANSPARENCY",
+        "statement": "All demo operations must produce observable outputs",
+        "weight": 1.0,
+        "enforcement_level": "WARN"
+      }
+    ]
+  },
+  "resource_config": {
+    "enabled": true,
+    "waste_thresholds": {
+      "COMPUTE": 0.15,
+      "MEMORY": 0.20,
+      "STORAGE": 0.10
+    }
+  },
+  "reproducibility": {
+    "model_pins": {
+      "demo-model": "v1.0.0-demo"
+    }
+  }
+}
