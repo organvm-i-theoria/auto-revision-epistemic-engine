@@ -1,0 +1,41 @@
+/core/
+  AOR_core.py
+  DAG_spec.json
+  agent_manifest.yaml
+  requirements.txt
+/governance/
+  AXIOMS.md
+  ETHICS.md
+  HRG_PROTOCOL.md
+  POLICY_MAP.yml
+  /RUNBOOKS/
+    HRG-1-approval.md
+    HRG-3-escalation.md
+    rollback-procedure.md
+/meta/
+  LOGIC_AUDIT.md
+  COMMENTARY.md
+  BLINDSPOT_REGISTER.md
+  EVOLUTION_LOG.md
+  ATTN.md
+/state/
+  /checkpoints/
+  /logs/
+  agent_memory.db
+/rol/
+  resource_map.json
+  utilization_report.json
+  license_recommendations.md
+  service_priorities.yml
+  waste_gate.md
+/artifacts/
+  SBOM.spdx
+  provenance.intoto.jsonl
+  /RELEASES/
+/user_uploads/$USER/
+  drafts/
+  brainstorms/
+  archives/
+.env
+.env.example
+README.md
