@@ -1,0 +1,8 @@
+schema_version: '1.0'
+repo: auto-revision-epistemic-engine
+organ: I
+display_name: Self-governing orchestration framework with 8 phases, 4 human review
+  gates, BLAKE3 audit chain, and ethical axiom enforcement
+delivery:
+- platform: web_app
+  status: not_started
