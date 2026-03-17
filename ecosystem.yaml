@@ -1,8 +1,23 @@
 schema_version: '1.0'
 repo: auto-revision-epistemic-engine
 organ: I
-display_name: Self-governing orchestration framework with 8 phases, 4 human review
-  gates, BLAKE3 audit chain, and ethical axiom enforcement
+display_name: "Self-governing orchestration framework with 8 phases, 4 human review gates, BLAKE3 audit chain, and ethical axiom enforcement"
+
 delivery:
-- platform: web_app
-  status: not_started
+- platform: python_library
+  status: live
+  priority: critical
+  notes: "Python package with 8-phase orchestration and audit chain"
+  next_action: "Maintain and extend as ORGAN-II art-from derivative consumes it"
+
+content:
+- platform: docs_site
+  status: planned
+  priority: high
+  notes: "Architecture docs for 8 phases, review gates, and axiom system"
+  next_action: "Document phase lifecycle and gate criteria"
+- platform: academic_writing
+  status: planned
+  priority: medium
+  notes: "Paper on epistemic self-governance in AI orchestration"
+  next_action: "Draft outline connecting BLAKE3 audit to epistemic integrity"
