@@ -389,3 +389,11 @@ MIT License. See [LICENSE](LICENSE) for full text.
 This repository is part of **[ORGAN-I: Theory (organvm-i-theoria)](https://github.com/organvm-i-theoria)** — the epistemological foundation of the eight-organ creative-institutional system.
 
 For questions about the governance model, ethical axiom framework, or integration with downstream organs, open an issue or reach out via the org profile.
+
+<!-- SYSTEM-NAV-START -->
+
+---
+
+<sub>[Portfolio](https://4444j99.github.io/portfolio/) · [System Directory](https://4444j99.github.io/portfolio/directory/) · [ORGAN I · Theoria](https://organvm-i-theoria.github.io/) · Part of the <a href="https://4444j99.github.io/portfolio/directory/">ORGANVM eight-organ system</a></sub>
+
+<!-- SYSTEM-NAV-END -->
